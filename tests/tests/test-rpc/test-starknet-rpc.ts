@@ -308,4 +308,34 @@ describeDevMadara("Starknet RPC", (context) => {
       expect(error.message).to.equal("20: Contract not found");
     }
   });
+
+  describe('getTransactionReceipt', async function () {
+    it('should return an error when passed a non existing transaction hash', async function () {
+
+      await providerRPC.getBlockWithTxHashes("0x123").catch((error) => {
+        expect(error).to.be.instanceOf(LibraryError);
+        expect(error.message).to.equal("24: Block not found");
+      });
+
+      await providerRPC.getTransactionReceipt("0xf00ba")
+        .then(() => {
+          throw new Error('A call to getTransactionReceipt with a non existing transaction hash is supposed to fail')
+        })
+        .catch((error) => {
+          console.log(error);
+          expect(error).to.be.instanceOf(LibraryError);
+          expect(error.message).to.equal('25: Transaction hash not found');
+        })
+    });
+
+    it('should return an error when given a transaction hash that is not yet approved', function () {
+      // todo: implement
+      expect(false).to.be.true;
+    });
+
+    it('should return a valid transaction receipt when given an existing transaction hash', function () {
+      // todo: implement
+      expect(false).to.be.true;
+    });
+  });
 });

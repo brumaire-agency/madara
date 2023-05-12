@@ -28,6 +28,7 @@ pub use frame_system::Call as SystemCall;
 use mp_starknet::execution::types::{
     ClassHashWrapper, ContractAddressWrapper, ContractClassWrapper, StorageKeyWrapper,
 };
+use mp_starknet::transaction::types::TransactionReceiptWrapper;
 pub use pallet_balances::Call as BalancesCall;
 use pallet_grandpa::{fg_primitives, AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 /// Import the StarkNet pallet.
@@ -302,6 +303,11 @@ impl_runtime_apis! {
         fn contract_class_by_class_hash(class_hash: ClassHashWrapper) -> Option<ContractClassWrapper> {
             Starknet::contract_class_by_class_hash(class_hash)
         }
+
+		fn transaction_receipt_by_hash(transaction_hash: H256) -> Option<TransactionReceiptWrapper> {
+			// todo: Implement the function.
+			None
+		}
     }
 
     #[cfg(feature = "runtime-benchmarks")]

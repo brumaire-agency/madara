@@ -9,6 +9,7 @@ mod tests;
 
 use jsonrpsee::core::RpcResult;
 use jsonrpsee::proc_macros::rpc;
+use starknet_api::transaction::{TransactionHash, TransactionReceipt};
 
 pub mod types;
 pub mod utils;
@@ -63,4 +64,8 @@ pub trait StarknetRpcApi {
     /// Get block information with transaction hashes given the block id
     #[method(name = "getBlockWithTxHashes")]
     fn get_block_with_tx_hashes(&self, block_id: BlockId) -> RpcResult<MaybePendingBlockWithTxHashes>;
+
+	/// Get the transaction receipt by the transaction hash
+	#[method(name = "getTransactionReceipt")]
+	fn get_transaction_receipt(&self, transaction_hash: TransactionHash) -> RpcResult<TransactionReceipt>;
 }

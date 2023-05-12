@@ -8,6 +8,7 @@
 use mp_starknet::execution::types::{
     ClassHashWrapper, ContractAddressWrapper, ContractClassWrapper, StorageKeyWrapper,
 };
+use mp_starknet::transaction::types::TransactionReceiptWrapper;
 use sp_core::{H256, U256};
 pub extern crate alloc;
 use alloc::vec::Vec;
@@ -30,5 +31,7 @@ sp_api::decl_runtime_apis! {
         fn contract_class_hash_by_address(address: ContractAddressWrapper) -> Option<ClassHashWrapper>;
         /// Returns the contract class for the given class hash.
         fn contract_class_by_class_hash(class_hash: ClassHashWrapper) -> Option<ContractClassWrapper>;
+		/// Returns the receipt for the given transaction hash.
+		fn transaction_receipt_by_hash(transaction_hash: H256) -> Option<TransactionReceiptWrapper>;
     }
 }

@@ -5,6 +5,7 @@
 mod errors;
 mod madara_backend_client;
 
+use std::borrow::BorrowMut;
 use std::marker::PhantomData;
 use std::str::FromStr;
 use std::sync::Arc;
@@ -13,10 +14,7 @@ use errors::StarknetRpcApiError;
 use hex::FromHex;
 use jsonrpsee::core::{async_trait, RpcResult};
 use log::error;
-use mc_rpc_core::types::{
-    BlockHashAndNumber, BlockId as StarknetBlockId, BlockStatus, BlockWithTxHashes, ContractAddress, ContractClassHash,
-    FieldElement, FunctionCall, MaybePendingBlockWithTxHashes, RPCContractClass, Syncing,
-};
+use mc_rpc_core::types::{BlockHashAndNumber, BlockId as StarknetBlockId, BlockStatus, BlockTag, BlockWithTxHashes, ContractAddress, ContractClassHash, FieldElement, FunctionCall, MaybePendingBlockWithTxHashes, RPCContractClass, Syncing};
 use mc_rpc_core::utils::to_rpc_contract_class;
 pub use mc_rpc_core::StarknetRpcApiServer;
 use mc_storage::OverrideHandle;
@@ -29,6 +27,7 @@ use sp_blockchain::HeaderBackend;
 use sp_core::{H256, U256};
 use sp_runtime::traits::{Block as BlockT, Header as HeaderT};
 use starknet_api::hash::StarkFelt;
+use starknet_api::transaction::{TransactionHash, TransactionReceipt};
 
 /// A Starknet RPC server for Madara
 pub struct Starknet<B: BlockT, BE, C> {
@@ -477,6 +476,15 @@ where
         };
         Ok(MaybePendingBlockWithTxHashes::Block(block_with_tx_hashes))
     }
+
+	fn get_transaction_receipt(&self, transaction_hash: TransactionHash) -> RpcResult<TransactionReceipt> {
+		// todo: Call the runtime to get the transaction receipt matching the given hash. Also:
+		//       - Is adding a function performing this query logic to the runtime the way to go ?
+		//       - How can we fetch info from the runtime without passing in a block ? Do we need
+		//         to iterate on block number backwards until genesis (which sounds horrendously
+		//         slow/bad).
+		Err(StarknetRpcApiError::TxnHashNotFound.into())
+	}
 }
 
 /// Removes the "0x" prefix from a given hexadecimal string and pads it with 0s
